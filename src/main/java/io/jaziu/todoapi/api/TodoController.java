@@ -4,17 +4,16 @@ import io.jaziu.todoapi.api.viewmodel.TodoViewModel;
 import io.jaziu.todoapi.model.Todo;
 import io.jaziu.todoapi.repository.TodoRepository;
 import io.jaziu.todoapi.repository.UserRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.stream.Collectors.reducing;
 import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("api/todos")
-@CrossOrigin
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class TodoController {
 
     private TodoRepository todoRepository;
@@ -25,6 +24,7 @@ public class TodoController {
         this.userRepository = userRepository;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all") // Get Todos of all users
     public List<TodoViewModel> all() {
         return this.todoRepository.findAll()
@@ -33,6 +33,7 @@ public class TodoController {
                 .collect((toList()));
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("byId/{id}")
     public TodoViewModel byId(@PathVariable Long id){
         var  temp = todoRepository.findById(id);
@@ -40,6 +41,7 @@ public class TodoController {
         return todo;
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/byUser/{userId}")
     public List<TodoViewModel> byUser(@PathVariable(name = "userId") Long userId) {
         var temp = userRepository.findById(userId);
@@ -47,6 +49,7 @@ public class TodoController {
 
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PutMapping("/add/{userId}")
     public void addTodo(@PathVariable(name = "userId") Long userId, @RequestParam String text){
         var user = userRepository.findById(userId);
@@ -59,6 +62,7 @@ public class TodoController {
 
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @DeleteMapping("/delete/{todoId}")
     public void deleteTodo(@PathVariable Long todoId){
 
@@ -77,6 +81,7 @@ public class TodoController {
 
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/update/{todoId}")
     public void updateTodo(@PathVariable Long todoId, @RequestParam String text){
 
@@ -85,7 +90,7 @@ public class TodoController {
        todoRepository.save(updatedTodo);
 
     }
-
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/active/{todoId}")
     public void updateTodoActive(@PathVariable Long todoId, @RequestParam boolean active){
 

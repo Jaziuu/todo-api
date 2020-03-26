@@ -8,11 +8,10 @@ import io.jaziu.todoapi.repository.RoleRepository;
 import io.jaziu.todoapi.repository.TodoRepository;
 import io.jaziu.todoapi.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -21,21 +20,25 @@ public class DbInit implements CommandLineRunner {
     private UserRepository userRepository;
     private TodoRepository todoRepository;
     private RoleRepository roleRepository;
+    private PasswordEncoder encoder;
 
-    public DbInit(UserRepository userRepository, TodoRepository todoRepository, RoleRepository roleRepository) {
+    public DbInit(UserRepository userRepository, TodoRepository todoRepository, RoleRepository roleRepository, PasswordEncoder encoder) {
         this.userRepository = userRepository;
         this.todoRepository = todoRepository;
         this.roleRepository = roleRepository;
+        this.encoder = encoder;
     }
 
     @Override
     public void run(String... args) throws Exception {
 
+
+
         roleRepository.save(new Role(RoleName.ROLE_USER));
         roleRepository.save(new Role(RoleName.ROLE_ADMIN));
 
-        User admin = new User("admin","admin123","adminemail@gmail.com");
-        User user = new User("user","user123","useremail@gmail.com");
+        User admin = new User("admin",encoder.encode("admin123"),"adminemail@gmail.com");
+        User user = new User("user",encoder.encode("user123"),"useremail@gmail.com");
         Todo todo1 = new Todo("Finish this app",admin);
         Todo todo2 = new Todo("Create UI",admin);
         Todo todo3 = new Todo("Make coffe",user);
@@ -77,8 +80,6 @@ public class DbInit implements CommandLineRunner {
 
         user.setRoles(userRoles);
         userRepository.save(user);
-
-
 
     }
 }
