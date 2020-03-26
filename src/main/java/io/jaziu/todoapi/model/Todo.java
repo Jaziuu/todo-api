@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class Todo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 
@@ -26,9 +26,19 @@ public class Todo {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    public Todo(String text, boolean active, User user) {
+    public Todo(String text,  User user) {
         this.text = text;
         this.active = true;
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Todo{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", active=" + active +
+                ", user=" + user +
+                '}';
     }
 }

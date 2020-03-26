@@ -1,0 +1,26 @@
+
+#GET ALL Todos
+GET {{todo-url}}/all
+###
+
+#GET Todo BY ID
+GET {{todo-url}}/byId/1
+###
+
+#GET Users Todo BY UserID
+GET {{todo-url}}/byUser/1
+###
+# ADD Todo based on UserId
+PUT {{todo-url}}/add/1?text=testTodo
+###
+# Delete Todo by Id
+DELETE {{todo-url}}/delete/1
+###
+
+#Update Todo text by Todo id
+POST {{todo-url}}/update/1?text=changedTodo
+###
+
+#Update Todo active by Todo id
+POST {{todo-url}}/active/1?active=false
+###

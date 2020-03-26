@@ -12,11 +12,10 @@ import javax.persistence.*;
 @Setter
 @Entity(name = "roles")
 @NoArgsConstructor
-@AllArgsConstructor
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)
@@ -24,5 +23,7 @@ public class Role {
     @Column(length = 60)
     private RoleName name;
 
-
+    public Role(RoleName name) {
+        this.name = name;
+    }
 }

@@ -44,4 +44,27 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_todos",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "todo_id"))
+    private Set<Todo> todos = new HashSet<>();
+
+    public User(@NotBlank @Size(min = 3, max = 50) String username, @NotBlank @Size(min = 6, max = 100) String password,@NotBlank @Size(max = 50) @Email String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                ", todos=" + todos +
+                '}';
+    }
 }
