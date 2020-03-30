@@ -75,23 +75,16 @@ public class AuthController {
         }
 
         // Creating user's account
-        User user = new User( signUpRequest.getUsername(), signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
+        User user = new User( signUpRequest.getUsername(),
+                encoder.encode(signUpRequest.getPassword()), signUpRequest.getEmail());
 
-        Set<String> strRoles = signUpRequest.getRole();
+        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+                .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
+
+
         Set<Role> roles = new HashSet<>();
+        roles.add(userRole);
 
-        strRoles.forEach(role -> {
-            if ("admin".equals(role)) {
-                Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
-                        .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
-                roles.add(adminRole);
-            } else {
-                Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-                        .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
-                roles.add(userRole);
-            }
-        });
 
         user.setRoles(roles);
         userRepository.save(user);
