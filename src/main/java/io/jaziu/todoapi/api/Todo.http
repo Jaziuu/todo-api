@@ -17,10 +17,10 @@ PUT {{todo-url}}/add/1?text=testTodo
 DELETE {{todo-url}}/delete/1
 ###
 
-#Update Todo text by Todo id
+#Update Todo text by Todo userId
 POST {{todo-url}}/update/1?text=changedTodo
 ###
 
-#Update Todo active by Todo id
+#Update Todo active by Todo userId
 POST {{todo-url}}/active/1?active=false
 ###

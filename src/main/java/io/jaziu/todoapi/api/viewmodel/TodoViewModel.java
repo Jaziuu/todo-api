@@ -2,10 +2,12 @@ package io.jaziu.todoapi.api.viewmodel;
 
 import io.jaziu.todoapi.model.Todo;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class TodoViewModel {
 
     private Long id;

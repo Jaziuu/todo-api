@@ -32,13 +32,4 @@ public class Todo {
         this.user = user;
     }
 
-    @Override
-    public String toString() {
-        return "Todo{" +
-                "id=" + id +
-                ", text='" + text + '\'' +
-                ", active=" + active +
-                ", user=" + user +
-                '}';
-    }
 }

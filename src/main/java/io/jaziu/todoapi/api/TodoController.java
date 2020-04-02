@@ -50,15 +50,16 @@ public class TodoController {
     }
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @PutMapping("/add/{userId}")
-    public void addTodo(@PathVariable(name = "userId") Long userId, @RequestParam String text){
-        var user = userRepository.findById(userId);
+    @PutMapping("/add")
+    public TodoViewModel addTodo(  @RequestBody TodoViewModel todo){
+        var user = userRepository.findById(todo.getUserId());
         var todos = user.get().getTodos();
-        var todo = new Todo(text,user.get());
-        todoRepository.save(todo);
-        todos.add(todo);
+        var temp = new Todo(todo.getText(),user.get());
+        todoRepository.save(temp);
+        todos.add(temp);
         user.get().setTodos(todos);
         userRepository.save(user.get());
+       return new TodoViewModel(temp);
 
     }
 
@@ -82,11 +83,12 @@ public class TodoController {
     }
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @PostMapping("/update/{todoId}")
-    public void updateTodo(@PathVariable Long todoId, @RequestParam String text){
+    @PostMapping("/update")
+    public void updateTodo( @RequestBody TodoViewModel todo){
 
-       var updatedTodo = todoRepository.findById(todoId).get();
-       updatedTodo.setText(text);
+       var updatedTodo = todoRepository.findById(todo.getId()).get();
+       updatedTodo.setText(todo.getText());
+       updatedTodo.setActive(todo.isActive());
        todoRepository.save(updatedTodo);
 
     }
